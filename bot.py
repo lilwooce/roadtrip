@@ -22,8 +22,6 @@ dbport = os.getenv("DB_PORT")
 token = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix=get_prefix, description="Listen to music on a roadtrip")
 
-print(host)
-
 mydb = mysql.connector.connect(
 host=host,
 user=username,
