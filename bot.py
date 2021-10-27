@@ -18,18 +18,18 @@ host = os.getenv('DB_HOST')
 username = os.getenv('DB_USER')
 password = os.getenv('DB_PASS')
 db = os.getenv("DB_NAME")
+dbport = os.getenv("DB_PORT")
 token = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix=get_prefix, description="Listen to music on a roadtrip")
 
-try:
-    mydb = mysql.connector.connect(
-    host=host,
-    user=username,
-    password=password,
-    database=db
-    )
-except:
-    print("connection failed")
+print(host)
+
+mydb = mysql.connector.connect(
+host=host,
+user=username,
+password=password,
+database=db
+)
 
 cursor = mydb.cursor()
 
@@ -67,4 +67,5 @@ for extension in initial_extensions:
         print(f'Failed to load extension {extension}.', file=sys.stderr)
         traceback.print_exc()
 
+mydb.close()
 bot.run(token)
