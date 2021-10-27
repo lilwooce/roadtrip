@@ -21,12 +21,15 @@ db = os.getenv("DB_NAME")
 token = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix=get_prefix, description="Listen to music on a roadtrip")
 
-mydb = mysql.connector.connect(
-  host=host,
-  user=username,
-  password=password,
-  database=db
-)
+try:
+    mydb = mysql.connector.connect(
+    host=host,
+    user=username,
+    password=password,
+    database=db
+    )
+except:
+    print("connection failed")
 
 cursor = mydb.cursor()
 
