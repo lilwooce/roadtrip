@@ -16,9 +16,10 @@ def get_prefix(client, message):
     )
     mydb.reconnect()
     cursor = mydb.cursor()
-    sql = f"SELECT * FROM prefixes WHERE server = {message.guild.id}"
-    cursor.execute(sql)
-    result = cursor.fetchall()
+    sql = "SELECT prefix FROM prefixes WHERE server = %s"
+    cursor.execute(sql, (message.guild.id,))
+    result = cursor.fetchone()
+    print(result)
     mydb.close()
     return result
 
@@ -55,8 +56,8 @@ async def on_guild_join(guild):
         port=dbport
     )
     cursor = mydb.cursor()
-    sql = f"INSERT INTO prefixes (server, Prefix) VALUES (%s, %s)"
-    val = (str(guild.id), "!")
+    sql = "INSERT INTO prefixes (server, Prefix) VALUES (%s, %s)"
+    val = (str(guild.id), "!",)
     cursor.execute(sql, val)
     mydb.commit()
     mydb.close()
@@ -71,8 +72,8 @@ async def on_guild_remove(guild):
         port=dbport
     )
     cursor = mydb.cursor()
-    sql = f"DELETE FROM prefixes WHERE server = {str(guild.id)}"
-    cursor.execute(sql)
+    sql = "DELETE FROM prefixes WHERE server = %s"
+    cursor.execute(sql, (str(guild.id),))
     mydb.commit()
     mydb.close()
 

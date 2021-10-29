@@ -11,14 +11,7 @@ usern = os.getenv('DB_USER')
 passw = os.getenv('DB_PASS')
 db = os.getenv("DB_NAME")
 
-mydb = mysql.connector.connect(
-host=host,
-user=usern,
-password=passw,
-database=db
-)
 
-cursor = mydb.cursor()
 
 class Config(commands.Cog, name="Configuration"):
     def __init__(self, bot):
@@ -31,10 +24,23 @@ class Config(commands.Cog, name="Configuration"):
         print(f"{self.__class__.__name__} Cog has been loaded\n----")
 
     @commands.command()
-    async def prefix(self, ctx, new_prefix):
-        sql = f"UPDATE prefixes SET prefix = {new_prefix} WHERE server = {str(ctx.message.guild.id)}"
-        cursor.execute(sql)
-        await ctx.send(f"Changed the prefix to: {new_prefix}")    
+    async def prefix(self, ctx, new_prefix=None):
+        if(new_prefix):
+            mydb = mysql.connector.connect(
+            host=host,
+            user=usern,
+            password=passw,
+            database=db
+            )
+
+            cursor = mydb.cursor()
+            sql = f"UPDATE prefixes SET prefix = (%s) WHERE server = (%s)"
+            cursor.execute(sql, (new_prefix, ctx.message.guild.id,))
+            mydb.commit()
+            await ctx.send(f"Changed the prefix to: {new_prefix}")    
+            mydb.close()
+        else:
+            await ctx.send("Please input a new prefix.")
 
         
 
