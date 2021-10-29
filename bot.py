@@ -7,6 +7,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 def get_prefix(client, message):
+    cursor = mydb.cursor()
     sql = f"SELECT * FROM prefixes WHERE server = {message.guild.id}"
     cursor.execute(sql)
     result = cursor.fetchall()
@@ -30,7 +31,7 @@ mydb = mysql.connector.connect(
     port=dbport
 )
 
-cursor = mydb.cursor()
+
 
 initial_extensions = {
     "cogs.Config",
@@ -47,6 +48,7 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
+    cursor = mydb.cursor()
     sql = f"INSERT INTO prefixes (server, Prefix) VALUES (%s, %s)"
     val = (str(guild.id), "!")
     cursor.execute(sql, val)
@@ -54,6 +56,7 @@ async def on_guild_join(guild):
 
 @bot.event
 async def on_guild_remove(guild):
+    cursor = mydb.cursor()
     sql = f"DELETE FROM prefixes WHERE server = {str(guild.id)}"
     cursor.execute(sql)
     mydb.commit()
