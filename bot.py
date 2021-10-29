@@ -17,6 +17,7 @@ load_dotenv()
 host = os.getenv('DB_HOST')
 username = os.getenv('DB_USER')
 password = os.getenv('DB_PASS')
+dbport = os.getenv('DB_PORT')
 db = os.getenv("DB_NAME")
 token = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix=get_prefix, description="Listen to music on a roadtrip")
@@ -25,7 +26,8 @@ mydb = mysql.connector.connect(
     host=host,
     user=username,
     password=password,
-    database=db
+    database=db,
+    port=dbport
 )
 
 cursor = mydb.cursor()
