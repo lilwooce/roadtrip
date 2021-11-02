@@ -56,7 +56,7 @@ async def on_guild_join(guild):
         port=dbport
     )
     cursor = mydb.cursor()
-    sql = "INSERT INTO prefixes (server, Prefix) VALUES (%s, %s)"
+    sql = "INSERT INTO prefixes (server, prefix) VALUES (%s, %s)"
     val = (str(guild.id), "!",)
     cursor.execute(sql, val)
     mydb.commit()
