@@ -36,13 +36,13 @@ async def on_ready():
 async def on_guild_join(guild):
     obj = {"f1": "server", "q1": guild.id}
     result = requests.post(insertPURL, data=obj, headers={"User-Agent": "XY"})
-    return result.text
+    print(result.status_code)
 
 @bot.event
 async def on_guild_remove(guild):
     obj = {"f1": "server", "q1": guild.id}
     result = requests.post(deletePURL, data=obj, headers={"User-Agent": "XY"})
-    return result.text
+    print(result.status_code)
 
 
 for extension in initial_extensions:
