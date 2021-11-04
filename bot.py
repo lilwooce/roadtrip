@@ -1,35 +1,22 @@
 import discord
 import os
 import sys
-import mysql.connector
+import requests
 import traceback
 from discord.ext import commands
 from dotenv import load_dotenv
 
 def get_prefix(client, message):
-    mydb = mysql.connector.connect(
-        host=host,
-        user=username,
-        password=password,
-        database=db,
-        port=dbport
-    )
-    mydb.reconnect()
-    cursor = mydb.cursor()
-    sql = "SELECT prefix FROM prefixes WHERE server = %s"
-    cursor.execute(sql, (message.guild.id,))
-    result = cursor.fetchone()
-    print(result)
-    mydb.close()
-    return result
+    obj = {"f1": "server", "q1": message.guild.id}
+    print(obj)
+    result = requests.get(geturl, params=obj, headers={"User-Agent": "XY"})
+    return result.text
 
 
-load_dotenv()
-host = os.getenv('DB_HOST')
-username = os.getenv('DB_USER')
-password = os.getenv('DB_PASS')
-dbport = os.getenv('DB_PORT')
-db = os.getenv("DB_NAME")
+load_dotenv()   
+insertPURL = os.getenv('IP_URL')
+deletePURL = os.getenv('DP_URL')
+geturl = os.getenv('GET_URL')
 token = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix=get_prefix, description="Listen to music on a roadtrip")
 
@@ -48,34 +35,15 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
-    mydb = mysql.connector.connect(
-        host=host,
-        user=username,
-        password=password,
-        database=db,
-        port=dbport
-    )
-    cursor = mydb.cursor()
-    sql = "INSERT INTO prefixes (server, prefix) VALUES (%s, %s)"
-    val = (str(guild.id), "!",)
-    cursor.execute(sql, val)
-    mydb.commit()
-    mydb.close()
+    obj = {"f1": "server", "q1": guild.id}
+    result = requests.post(insertPURL, data=obj, headers={"User-Agent": "XY"})
+    return result.text
 
 @bot.event
 async def on_guild_remove(guild):
-    mydb = mysql.connector.connect(
-        host=host,
-        user=username,
-        password=password,
-        database=db,
-        port=dbport
-    )
-    cursor = mydb.cursor()
-    sql = "DELETE FROM prefixes WHERE server = %s"
-    cursor.execute(sql, (str(guild.id),))
-    mydb.commit()
-    mydb.close()
+    obj = {"f1": "server", "q1": guild.id}
+    result = requests.post(deletePURL, data=obj, headers={"User-Agent": "XY"})
+    return result.text
 
 
 for extension in initial_extensions:

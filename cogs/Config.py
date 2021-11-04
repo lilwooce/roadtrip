@@ -1,15 +1,14 @@
 from discord.ext import commands
 import json
 import os
-import mysql.connector
+import requests
 import discord 
 from dotenv import load_dotenv
 
 load_dotenv()
-host = os.getenv('DB_HOST')
-usern = os.getenv('DB_USER')
-passw = os.getenv('DB_PASS')
-db = os.getenv("DB_NAME")
+insertPURL = os.getenv('IP_URL')
+deletePURL = os.getenv('DP_URL')
+geturl = os.getenv('GET_URL')
 
 
 
@@ -26,19 +25,9 @@ class Config(commands.Cog, name="Configuration"):
     @commands.command()
     async def prefix(self, ctx, new_prefix=None):
         if(new_prefix):
-            mydb = mysql.connector.connect(
-            host=host,
-            user=usern,
-            password=passw,
-            database=db
-            )
-
-            cursor = mydb.cursor()
-            sql = f"UPDATE prefixes SET prefix = (%s) WHERE server = (%s)"
-            cursor.execute(sql, (new_prefix, ctx.message.guild.id,))
-            mydb.commit()
-            await ctx.send(f"Changed the prefix to: {new_prefix}")    
-            mydb.close()
+            obj = {"f1": "server", "q1": ctx.message.guild.id}
+            result = requests.post(insertPURL, data=obj, headers={"User-Agent": "XY"})
+            return result.text
         else:
             await ctx.send("Please input a new prefix.")
 

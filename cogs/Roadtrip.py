@@ -1,15 +1,13 @@
 from discord.ext import commands
-import json
 import os
-import mysql.connector
+import requests
 import discord 
 from dotenv import load_dotenv
 
 load_dotenv()
-host = os.getenv('DB_HOST')
-usern = os.getenv('DB_USER')
-passw = os.getenv('DB_PASS')
-db = os.getenv("DB_NAME")
+asurl = os.getenv("AS_URL")
+rsurl = os.getenv("RS_URL")
+geturl = os.getenv('GET_URL')
 
 class Roadtrip(commands.Cog, name="Roadtrip"):
     def __init__(self, bot):
@@ -22,38 +20,20 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
     @commands.command(aliases=["aps"])
     async def addplaylistsong(self, ctx, song):
         try:
-            mydb = mysql.connector.connect(
-            host=host,
-            user=usern,
-            password=passw,
-            database=db
-            )
-
-            cursor = mydb.cursor()
-            sql = f"INSERT INTO playlists (user, song) VALUE (%s, %s)"
-            cursor.execute(sql, (ctx.author.id, song,))
-            mydb.commit()
-            await ctx.send(f"Added {song} to {ctx.author.name}'s playlist.")    
-            mydb.close()
+            obj = {"q1": ctx.author.id, "q2": song}
+            result = requests.post(asurl, data=obj)
+            print(result.status_code)
+            await ctx.channel.send(f"Added {song} to {ctx.author.name}'s playlist")
         except:
             await ctx.channel.send("Please input a valid song")
 
-    @commands.command(aliases=["aps"])
-    async def addplaylistsong(self, ctx, song):
+    @commands.command(aliases=["rps"])
+    async def removeplaylistsong(self, ctx, song):
         try:
-            mydb = mysql.connector.connect(
-            host=host,
-            user=usern,
-            password=passw,
-            database=db
-            )
-
-            cursor = mydb.cursor()
-            sql = f"DELETE FROM playlists WHERE user = %s AND song = %s"
-            cursor.execute(sql, (ctx.author.id, song,))
-            mydb.commit()
-            await ctx.send(f"Removed {song} from {ctx.author.name}'s playlist.")    
-            mydb.close()
+            obj = {"q1": ctx.author.id, "q2": song, "f1": "user", "f2": "song"}
+            result = requests.post(rsurl, data=obj)
+            print(result.text)
+            await ctx.channel.send(f"Removed {song} from {ctx.author.name}'s playlist")
         except:
             await ctx.channel.send("Please input a valid song")
 
