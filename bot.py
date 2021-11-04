@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 
 def get_prefix(client, message):
     obj = {"f1": "server", "q1": message.guild.id}
-    print(obj)
     result = requests.get(geturl, params=obj, headers={"User-Agent": "XY"})
     return result.text
 
