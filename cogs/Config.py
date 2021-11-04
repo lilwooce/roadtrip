@@ -1,5 +1,4 @@
 from discord.ext import commands
-import json
 import os
 import requests
 import discord 
