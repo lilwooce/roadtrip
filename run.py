@@ -18,8 +18,7 @@ insertPURL = os.getenv('IP_URL')
 deletePURL = os.getenv('DP_URL')
 geturl = os.getenv('GET_URL')
 token = os.getenv('DISCORD_TOKEN')
-intents = discord.Intents().all()
-bot = commands.Bot(command_prefix=get_prefix, description=f"{get_prefix}help", intents=intents)
+bot = commands.Bot(command_prefix=get_prefix, description=f"{get_prefix}help")
 
 initial_extensions = {
     "cogs.Config",
