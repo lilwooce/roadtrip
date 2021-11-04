@@ -24,7 +24,7 @@ class Config(commands.Cog, name="Configuration"):
     @commands.command()
     async def prefix(self, ctx, new_prefix=None):
         if(new_prefix):
-            obj = {"f1": "server", "q1": ctx.message.guild.id}
+            obj = {"f1": ctx.message.guild.id, "f2": new_prefix}
             result = requests.post(insertPURL, data=obj, headers={"User-Agent": "XY"})
             await ctx.channel.send(f"Updated prefix to {new_prefix}")
         else:
