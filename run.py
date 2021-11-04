@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 def get_prefix(client, message):
     obj = {"f1": "server", "q1": message.guild.id}
     result = requests.get(geturl, params=obj, headers={"User-Agent": "XY"})
+    print(result.text)
     return result.text
 
 
@@ -17,7 +18,7 @@ insertPURL = os.getenv('IP_URL')
 deletePURL = os.getenv('DP_URL')
 geturl = os.getenv('GET_URL')
 token = os.getenv('DISCORD_TOKEN')
-bot = commands.Bot(command_prefix=get_prefix, description="Listen to music on a roadtrip")
+bot = commands.Bot(command_prefix=get_prefix, description=f"{get_prefix}help")
 
 initial_extensions = {
     "cogs.Config",
