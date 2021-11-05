@@ -18,7 +18,7 @@ insertPURL = os.getenv('IP_URL')
 deletePURL = os.getenv('DP_URL')
 geturl = os.getenv('GET_URL')
 token = os.getenv('DISCORD_TOKEN')
-bot = commands.Bot(command_prefix=get_prefix, description=f"{get_prefix}help")
+bot = commands.Bot(command_prefix=get_prefix, description=f"Listen to music on a roadtrip")
 
 initial_extensions = {
     "cogs.Config",
@@ -29,7 +29,7 @@ initial_extensions = {
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected')
-    activity = discord.Game(name="Driving Simulator")
+    activity = discord.Game(name=f"{get_prefix}help")
     await bot.change_presence(status=discord.Status.online, activity=activity)
 
 
