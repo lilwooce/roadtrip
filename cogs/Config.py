@@ -1,7 +1,6 @@
 from discord.ext import commands
 import os
 import requests
-import json
 import discord 
 from dotenv import load_dotenv
 
@@ -26,9 +25,8 @@ class Config(commands.Cog, name="Configuration"):
     async def prefix(self, ctx, new_prefix=None):
         if(new_prefix):
             obj = {"f1": ctx.message.guild.id, "f2": new_prefix}
-            mydata = json.dumps(obj)
             print(obj)
-            result = requests.post(insertPURL, json=mydata, headers={'content-type' : 'application/json'})
+            result = requests.post(insertPURL, data=obj, headers={"User-Agent": "XY"})
             print(result.status_code)
             print(result.url)
             await ctx.channel.send(f"Updated prefix to {new_prefix}")
