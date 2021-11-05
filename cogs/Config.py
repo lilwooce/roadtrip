@@ -28,7 +28,7 @@ class Config(commands.Cog, name="Configuration"):
             obj = {"f1": ctx.message.guild.id, "f2": new_prefix}
             mydata = json.dumps(obj)
             print(obj)
-            result = requests.post(insertPURL, data=mydata, headers={"User-Agent": "XY"})
+            result = requests.post(insertPURL, json=mydata, headers={"User-Agent": "XY"})
             print(result.status_code)
             print(result.url)
             await ctx.channel.send(f"Updated prefix to {new_prefix}")
