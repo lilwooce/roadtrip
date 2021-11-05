@@ -27,6 +27,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             for word in song:
                 fullsong += f"{word} "
             obj = {"q1": ctx.author.id, "q2": fullsong}
+            print(obj)
             result = requests.post(asurl, data=obj, headers={"User-Agent": "XY"})
             print(result.status_code)
             print(result.url)
@@ -45,6 +46,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             for word in song:
                 fullsong += f"{word} "
             obj = {"q1": ctx.author.id, "q2": fullsong}
+            print(obj)
             result = requests.post(rsurl, data=obj, headers={"User-Agent": "XY"})
             print(result.status_code)
             print(result.url)
