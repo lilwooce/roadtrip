@@ -18,7 +18,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         print(f"{self.__class__.__name__} Cog has been loaded\n----")
 
     @commands.command(aliases=["aps"])
-    async def addplaylistsong(self, ctx, **song):
+    async def addplaylistsong(self, ctx, *song):
         if (len(ctx.message.content) > 1024):
             await ctx.channel.send("Too long")
             return
