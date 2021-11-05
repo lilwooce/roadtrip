@@ -24,8 +24,12 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             return
         try:
             fullsong=""
+            count = 0
             for word in song:
-                fullsong += f"{word} "
+                if count > 0:
+                    fullsong += f"{word} "
+                else:
+                    fullsong += word
             obj = {"q1": ctx.author.id, "q2": fullsong}
             print(obj)
             result = requests.post(asurl, data=obj, headers={"User-Agent": "XY"})
