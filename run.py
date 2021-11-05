@@ -41,7 +41,7 @@ async def on_guild_join(guild):
 
 @bot.event
 async def on_guild_remove(guild):
-    obj = {"f1": "server", "q1": guild.id}
+    obj = {"q1": guild.id}
     result = requests.post(deletePURL, data=obj, headers={"User-Agent": "XY"})
     print(result.status_code)
 

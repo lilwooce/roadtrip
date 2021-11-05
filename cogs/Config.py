@@ -25,11 +25,8 @@ class Config(commands.Cog, name="Configuration"):
     async def prefix(self, ctx, new_prefix=None):
         if(new_prefix):
             obj = {"f1": ctx.message.guild.id, "f2": new_prefix}
-            print(obj)
             result = requests.post(insertPURL, data=obj, headers={"User-Agent": "XY"})
             print(result.status_code)
-            print(result.url)
-            print(result.text)
             await ctx.channel.send(f"Updated prefix to {new_prefix}")
         else:
             await ctx.send("Please input a new prefix.")

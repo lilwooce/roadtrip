@@ -18,26 +18,34 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         print(f"{self.__class__.__name__} Cog has been loaded\n----")
 
     @commands.command(aliases=["aps"])
-    async def addplaylistsong(self, ctx, song):
+    async def addplaylistsong(self, ctx, **song):
+        if (len(ctx.message.content) > 1024):
+            await ctx.channel.send("Too long")
+            return
         try:
-            obj = {"q1": ctx.author.id, "q2": song}
+            fullsong=""
+            for word in song:
+                fullsong += f"{word} "
+            obj = {"q1": ctx.author.id, "q2": fullsong}
             result = requests.post(asurl, data=obj, headers={"User-Agent": "XY"})
             print(result.status_code)
-            print(result.url)
-            print(result.text)
-            await ctx.channel.send(f"Added {song} to {ctx.author.name}'s playlist")
+            await ctx.channel.send(f"Added {fullsong} to {ctx.author.name}'s playlist")
         except:
             await ctx.channel.send("Please input a valid song")
 
     @commands.command(aliases=["rps"])
-    async def removeplaylistsong(self, ctx, song):
+    async def removeplaylistsong(self, ctx, *song):
+        if (len(ctx.message.content) > 1024):
+            await ctx.channel.send("Too long")
+            return
         try:
-            obj = {"q1": ctx.author.id, "q2": song, "f1": "user", "f2": "song"}
+            fullsong=""
+            for word in song:
+                fullsong += f"{word} "
+            obj = {"q1": ctx.author.id, "q2": fullsong}
             result = requests.post(rsurl, data=obj, headers={"User-Agent": "XY"})
             print(result.status_code)
-            print(result.url)
-            print(result.text)
-            await ctx.channel.send(f"Removed {song} from {ctx.author.name}'s playlist")
+            await ctx.channel.send(f"Removed {fullsong} from {ctx.author.name}'s playlist")
         except:
             await ctx.channel.send("Please input a valid song")
 
