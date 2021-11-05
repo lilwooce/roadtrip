@@ -29,13 +29,13 @@ initial_extensions = {
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected')
-    activity = discord.Game(name=f"{get_prefix()}help")
+    activity = discord.Game(name=f"!help")
     await bot.change_presence(status=discord.Status.online, activity=activity)
 
 
 @bot.event
 async def on_guild_join(guild):
-    obj = {"f1": "server", "q1": guild.id}
+    obj = {"f1": guild.id, "q1": '!'}
     result = requests.post(insertPURL, data=obj, headers={"User-Agent": "XY"})
     print(result.status_code)
 
