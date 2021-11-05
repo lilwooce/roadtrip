@@ -49,9 +49,16 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             await ctx.channel.send("Too long")
             return
         try:
-            fullsong=""
-            for word in song:
-                fullsong += f"{word} "
+            fullsong = ""
+            songLength = len(song)
+            if (len(song) > 1):
+                for x in range(songLength):
+                    if (x!=songLength-1):
+                        fullsong += f"{song[x]} "
+                    else:
+                        fullsong += song[x]
+            else:
+                fullsong = song[0]
             obj = {"q1": ctx.author.id, "q2": fullsong}
             print(obj)
             result = requests.post(rsurl, data=obj, headers={"User-Agent": "XY"})
