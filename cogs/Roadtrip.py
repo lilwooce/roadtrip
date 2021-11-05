@@ -29,6 +29,8 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             obj = {"q1": ctx.author.id, "q2": fullsong}
             result = requests.post(asurl, data=obj, headers={"User-Agent": "XY"})
             print(result.status_code)
+            print(result.url)
+            print(result.text)
             await ctx.channel.send(f"Added {fullsong} to {ctx.author.name}'s playlist")
         except:
             await ctx.channel.send("Please input a valid song")
