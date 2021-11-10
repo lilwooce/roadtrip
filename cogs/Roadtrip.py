@@ -31,7 +31,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         counter = 1
         for x in range(len(result)):
             print(result[x])
-            embed.add_field(name=counter, value=result[x])
+            embed.add_field(name=counter, value=result[x]['song'].strip("\'"))
         await ctx.channel.send(embed=embed)
             
 
