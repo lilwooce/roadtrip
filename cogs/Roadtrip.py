@@ -29,7 +29,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         embed = discord.Embed(title=f"{ctx.author.name}'s Playlist", description=f' ')
         counter = 1
         for x in range(len(result)):
-            embed.add_field(name=counter, value=result[x]['song'].strip("\'"))
+            embed.add_field(name=counter, value=result[x]['song'].strip("\'"), inline=False)
             counter += 1
         await ctx.channel.send(embed=embed)
             
