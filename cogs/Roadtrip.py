@@ -25,9 +25,10 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             
         r = requests.get(gpurl, data={"user": user}, headers={"User-Agent": "XY"});
         result = r.text
-        embed = discord.Embed(title=f"{ctx.author.name}'s Playlist", description='')
+        embed = discord.Embed(title=f"{ctx.author.name}'s Playlist", description=f'{len(result)} song(s)')
         counter = 1
         for x in range(len(result)):
+            print(result[x])
             embed.add_field(name=counter, value=result[x])
         await ctx.channel.send(embed=embed)
             
