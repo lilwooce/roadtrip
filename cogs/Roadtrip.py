@@ -8,6 +8,7 @@ load_dotenv()
 asurl = os.getenv("AS_URL")
 rsurl = os.getenv("RS_URL")
 geturl = os.getenv('GET_URL')
+gpurl = os.getenv('GP_URL')
 
 class Roadtrip(commands.Cog, name="Roadtrip"):
     def __init__(self, bot):
@@ -16,6 +17,19 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"{self.__class__.__name__} Cog has been loaded\n----")
+
+    @commands.command(aliases=['pl'])
+    async def playlist(self, ctx, user=None):
+        if user == None:
+            user = ctx.author.id
+            
+        result = requests.get(gpurl, data={"user": user}, headers={"User-Agent": "XY"});
+        embed = discord.Embed(title=f"{ctx.author.name}'s Playlist", description='')
+        counter = 1
+        for x in range(len(result)):
+            embed.add_field(name=counter, value=result[x])
+        await ctx.channel.send(embed=embed)
+            
 
     @commands.command(aliases=["aps"])
     async def addplaylistsong(self, ctx, *song):
