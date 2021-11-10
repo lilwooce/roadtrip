@@ -25,7 +25,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         
         print(user)
         r = requests.get(gpurl, params={"user": user}, headers={"User-Agent": "XY"});
-        result = r.text
+        result = r.json()
         print(result)
         embed = discord.Embed(title=f"{ctx.author.name}'s Playlist", description=f' ')
         counter = 1
