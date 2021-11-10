@@ -23,7 +23,8 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         if user == None:
             user = ctx.author.id
             
-        result = requests.get(gpurl, data={"user": user}, headers={"User-Agent": "XY"});
+        r = requests.get(gpurl, data={"user": user}, headers={"User-Agent": "XY"});
+        result = r.text
         embed = discord.Embed(title=f"{ctx.author.name}'s Playlist", description='')
         counter = 1
         for x in range(len(result)):
