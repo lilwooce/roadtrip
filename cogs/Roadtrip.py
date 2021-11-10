@@ -22,8 +22,9 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
     async def playlist(self, ctx, user=None):
         if user == None:
             user = ctx.author.id
-            
-        r = requests.get(gpurl, data={"user": user}, headers={"User-Agent": "XY"});
+        
+        print(user)
+        r = requests.get(gpurl, params={"user": user}, headers={"User-Agent": "XY"});
         result = r.text
         print(result)
         embed = discord.Embed(title=f"{ctx.author.name}'s Playlist", description=f' ')
