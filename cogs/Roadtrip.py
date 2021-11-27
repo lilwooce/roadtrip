@@ -94,10 +94,12 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         connected = ctx.author.voice
         if connected:
             await channel.connect()
+            await ctx.channel.send("joined voice channel")
 
     @commands.command(aliases=['et'])
     async def endTrip(self, ctx):
         await ctx.voice_client.disconnect()
+        await ctx.channel.send("left voice channel")
 
 def setup(bot):
     bot.add_cog(Roadtrip(bot))
