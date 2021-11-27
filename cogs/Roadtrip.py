@@ -90,7 +90,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
 
     @commands.command(aliases=['st'])
     async def startTrip(self, ctx):
-        channel = ctx.message.author.voice.voice_channel
+        channel = ctx.message.author.voice.channel
         connected = ctx.author.voice
         if connected:
             await channel.connect()
