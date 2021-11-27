@@ -31,6 +31,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         for x in range(len(result)):
             s = result[x]['song'].strip("\'")
             embed.add_field(name=f"{counter} {s}", value='\u200b', inline=False)
+            embed.add_field(name=f"{counter} {s}", value='\u200b', inline=False)
             counter += 1
         await ctx.channel.send(embed=embed)
             
@@ -86,6 +87,17 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             await ctx.channel.send(f"Removed {fullsong} from {ctx.author.name}'s playlist")
         except:
             await ctx.channel.send("Please input a valid song")
+
+    @commands.command(aliases=['st'])
+    async def startTrip(self, ctx):
+        channel = ctx.message.author.voice.voice_channel
+        connected = ctx.author.voice
+        if connected:
+            await channel.connect()
+
+    @commands.command(aliases=['et'])
+    async def endTrip(self, ctx):
+        await ctx.voice_client.disconnect()
 
 def setup(bot):
     bot.add_cog(Roadtrip(bot))
