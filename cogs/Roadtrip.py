@@ -116,6 +116,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         await ctx.voice_client.disconnect()
         await ctx.channel.send("left voice channel")
 
+    @commands.command()
     async def play(self, ctx, url):
         server = ctx.message.server
         channel = ctx.author.channel
