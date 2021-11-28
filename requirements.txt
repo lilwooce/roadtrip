@@ -3,3 +3,6 @@ python-dotenv
 requests
 ffmpeg
 PyNaCl
+pip
+youtube_dl
+discord.py[voice]

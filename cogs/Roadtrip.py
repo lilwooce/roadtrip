@@ -3,12 +3,27 @@ import os
 import requests
 import discord 
 from dotenv import load_dotenv
+import youtube_dl
+import asyncio
 
 load_dotenv()
 asurl = os.getenv("AS_URL")
 rsurl = os.getenv("RS_URL")
 geturl = os.getenv('GET_URL')
 gpurl = os.getenv('GP_URL')
+
+
+ydl_opts = {
+    'format': 'bestaudio/best',
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    }],
+}   
+
+def endSong(guild, path):
+    os.remove(path)
 
 class Roadtrip(commands.Cog, name="Roadtrip"):
     def __init__(self, bot):
@@ -100,6 +115,29 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
     async def endTrip(self, ctx):
         await ctx.voice_client.disconnect()
         await ctx.channel.send("left voice channel")
+
+    async def play(self, ctx, url):
+        server = ctx.message.server
+        channel = ctx.author.channel
+        channel = None
+
+        if channel != None:
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                file = ydl.extract_info(url, download=True)
+                guild = ctx.message.guild.id
+                path = str(file['title']) + "-" + str(file['id'] + ".mp3")
+
+            channelName = channel.name
+            vc = await channel.connect()
+
+            vc.play(discord.FFmpegPCMAudio(path), after=lambda x: endSong(guild, path))
+            vc.source = discord.PCMVolumeTransformer(vc.source, 1)
+                
+            while vc.is_playing(): #waits until song ends
+                await asyncio.sleep(1)
+            else:
+                await vc.disconnect() #and disconnects
+                print("Disconnected")
 
 def setup(bot):
     bot.add_cog(Roadtrip(bot))
