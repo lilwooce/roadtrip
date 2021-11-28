@@ -118,7 +118,6 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
 
     @commands.command()
     async def play(self, ctx, url):
-        server = ctx.message.server
         channel = ctx.author.channel
         channel = None
 
