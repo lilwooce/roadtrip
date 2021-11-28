@@ -118,7 +118,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
 
     @commands.command()
     async def play(self, ctx, url):
-        channel = ctx.author.channel
+        channel = ctx.author.voice.channel
         channel = None
 
         if channel != None:
