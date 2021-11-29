@@ -34,7 +34,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         print(f"{self.__class__.__name__} Cog has been loaded\n----")
 
     @commands.command(aliases=['pl'])
-    async def playlist(ctx, user=None):
+    async def playlist(self, ctx, user=None):
         if user == None:
             user = ctx.author.id
         
@@ -52,7 +52,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             
 
     @commands.command(aliases=["aps"])
-    async def addplaylistsong(ctx, *song):
+    async def addplaylistsong(self, ctx, *song):
         if (len(ctx.message.content) > 1024):
             await ctx.channel.send("Too long")
             return
@@ -78,7 +78,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             await ctx.channel.send("Please input a valid song")
 
     @commands.command(aliases=["rps"])
-    async def removeplaylistsong(ctx, *song):
+    async def removeplaylistsong(self, ctx, *song):
         if (len(ctx.message.content) > 1024):
             await ctx.channel.send("Too long")
             return
@@ -104,7 +104,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             await ctx.channel.send("Please input a valid song")
 
     @commands.command(aliases=['st'])
-    async def startTrip(ctx):
+    async def startTrip(self, ctx):
         channel = ctx.message.author.voice.channel
         connected = ctx.author.voice
         if connected:
@@ -112,12 +112,12 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             await ctx.channel.send("joined voice channel")
 
     @commands.command(aliases=['et'])
-    async def endTrip(ctx):
+    async def endTrip(self, ctx):
         await ctx.voice_client.disconnect()
         await ctx.channel.send("left voice channel")
 
     '''@commands.command()
-    async def play(ctx, url):
+    async def play(self, ctx, url):
         channel = ctx.author.voice.channel
 
         if channel != None:
@@ -146,7 +146,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             await ctx.send("Please join a voice channel")'''
 
     @commands.command(pass_context=True, brief="This will play a song 'play [url]'", aliases=['p'])
-    async def play(ctx, url: str):
+    async def play(self, ctx, url: str):
         song_there = os.path.isfile("song.mp3")
         try:
             if song_there:
