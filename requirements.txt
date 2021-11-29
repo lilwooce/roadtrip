@@ -4,6 +4,5 @@ ffmpeg
 PyNaCl
 discord.py
 pip
-youtube_dl
+youtube-dl
 discord.py[voice]
-wavelink
