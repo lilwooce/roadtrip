@@ -6,6 +6,7 @@ import discord
 from dotenv import load_dotenv
 import youtube_dl
 import asyncio
+from discord.utils import get
 
 load_dotenv()
 asurl = os.getenv("AS_URL")
@@ -156,7 +157,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             return
         await ctx.send("Getting everything ready, playing audio soon")
         print("Someone wants to play music let me get that ready for them...")
-        voice = ctx.author.voice
+        voice = get(self.bot.voice_clients, guild=ctx.guild)
         ydl_opts = {
             'format': 'bestaudio/best',
             'postprocessors': [{
