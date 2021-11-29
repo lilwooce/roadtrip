@@ -119,7 +119,6 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
     @commands.command()
     async def play(self, ctx, url):
         channel = ctx.author.voice.channel
-        channel = None
 
         if channel != None:
             await channel.connect()
@@ -140,6 +139,8 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             else:
                 await vc.disconnect() #and disconnects
                 print("Disconnected")
+        else:
+            await ctx.send("Please join a voice channel")
 
 def setup(bot):
     bot.add_cog(Roadtrip(bot))
