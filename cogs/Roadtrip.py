@@ -123,6 +123,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         if channel != None:
             await channel.connect()
             await ctx.channel.send("joined voice channel")
+            
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 file = ydl.extract_info(url, download=True)
                 guild = ctx.message.guild.id
