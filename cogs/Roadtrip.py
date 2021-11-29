@@ -218,7 +218,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
                 raise commands.CommandError("Author not connected to a voice channel.")
         elif ctx.voice_client.is_playing():
             ctx.voice_client.stop()
-
+            
 
 def setup(bot):
     bot.add_cog(Roadtrip(bot))
