@@ -1,10 +1,9 @@
-discord.py
 python-dotenv
 requests
 ffmpeg
 PyNaCl
+discord.py
 pip
 youtube_dl
 discord.py[voice]
 wavelink
-lavalink
