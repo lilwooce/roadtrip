@@ -121,9 +121,6 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         channel = ctx.author.voice.channel
 
         if channel != None:
-            await channel.connect()
-            await ctx.channel.send("joined voice channel")
-            
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 file = ydl.extract_info(url, download=True)
                 guild = ctx.message.guild.id
@@ -131,6 +128,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
 
             channelName = channel.name
             vc = await channel.connect()
+            await ctx.channel.send("joined voice channel")
 
             vc.play(discord.FFmpegPCMAudio(path), after=lambda x: endSong(guild, path))
             vc.source = discord.PCMVolumeTransformer(vc.source, 1)
