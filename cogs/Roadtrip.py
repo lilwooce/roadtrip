@@ -152,35 +152,6 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         await ctx.voice_client.disconnect()
         await ctx.channel.send("left voice channel")
 
-    '''@commands.command()
-    async def play(self, ctx, url):
-        channel = ctx.author.voice.channel
-
-        if channel != None:
-            await channel.connect()
-            await ctx.channel.send("joined voice channel")
-            
-            try:
-                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                    ydl.download([url])
-            except:
-                os.system(f"""youtube-dl -o "song.%(ext)s" --extract-audio -x --audio-format mp3 {url}""")
-
-            channelName = channel.name
-            vc = await channel.connect()
-            await ctx.channel.send("joined voice channel")
-
-            vc.play(discord.FFmpegPCMAudio(path), after=lambda x: endSong(guild, path))
-            vc.source = discord.PCMVolumeTransformer(vc.source, 1)
-                
-            while vc.is_playing(): #waits until song ends
-                await asyncio.sleep(1)
-            else:
-                await vc.disconnect() #and disconnects
-                print("Disconnected")
-        else:
-            await ctx.send("Please join a voice channel")'''
-
     @commands.command()
     async def join(self, ctx, *, channel: discord.VoiceChannel):
         """Joins a voice channel"""
@@ -190,7 +161,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
 
         await channel.connect()
 
-    @commands.command()
+    '''@commands.command()
     async def yt(self, ctx, *, url):
         """Plays from a url (almost anything youtube_dl supports)"""
 
@@ -198,18 +169,18 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             player = await YTDLSource.from_url(url, loop=self.bot.loop)
             ctx.voice_client.play(player, after=lambda e: print(f'Player error: {e}') if e else None)
 
-        await ctx.send(f'Now playing: {player.title}')
+        await ctx.send(f'Now playing: {player.title}')'''
 
-    @commands.command()
+    '''@commands.command()
     async def play(self, ctx, *, query):
         """Plays a file from the local filesystem"""
 
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query))
         ctx.voice_client.play(source, after=lambda e: print(f'Player error: {e}') if e else None)
 
-        await ctx.send(f'Now playing: {query}')
+        await ctx.send(f'Now playing: {query}')'''
 
-    @commands.command(pass_context=True, brief="This will play a song 'play [url]'", aliases=['p'])
+    @commands.command(pass_context=True, brief="This will play a song 'play [url]'", aliases=['p', 'play'])
     async def stream(self, ctx, *, url):
         """Streams from a url (same as yt, but doesn't predownload)"""
 
@@ -235,8 +206,8 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
 
         await ctx.voice_client.disconnect()
 
-    @play.before_invoke
-    @yt.before_invoke
+    '''@play.before_invoke
+    @yt.before_invoke'''
     @stream.before_invoke
     async def ensure_voice(self, ctx):
         if ctx.voice_client is None:
