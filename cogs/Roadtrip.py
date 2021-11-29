@@ -219,10 +219,6 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         elif ctx.voice_client.is_playing():
             ctx.voice_client.stop()
 
-    @stream.before_invoke
-    async def banGrace(self, ctx):
-        if (ctx.author == 347162620996091904):
-            return
 
 def setup(bot):
     bot.add_cog(Roadtrip(bot))
