@@ -5,17 +5,12 @@ import requests
 import traceback
 from discord.ext import commands
 from dotenv import load_dotenv
-from bot import MusicBot
 
 def get_prefix(client, message):
     obj = {"f1": "server", "q1": message.guild.id}
     result = requests.get(geturl, params=obj, headers={"User-Agent": "XY"})
     prefix = result.text.strip('\"')
     return prefix
-
-def main():
-    bot = MusicBot()
-    bot.run()
 
 load_dotenv()   
 insertPURL = os.getenv('IP_URL')
@@ -49,7 +44,6 @@ async def on_guild_remove(guild):
     result = requests.post(deletePURL, data=obj, headers={"User-Agent": "XY"})
     print(result.status_code)
 
-
 for extension in initial_extensions:
     try:
         bot.load_extension(extension)
@@ -58,5 +52,3 @@ for extension in initial_extensions:
         traceback.print_exc()
 
 bot.run(token)
-if __name__ == "__main__":
-    main()
