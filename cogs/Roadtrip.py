@@ -145,7 +145,7 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         else:
             await ctx.send("Please join a voice channel")'''
 
-    @commands.command(pass_context=True, brief="This will play a song 'play [url]'", aliases=['pl'])
+    @commands.command(pass_context=True, brief="This will play a song 'play [url]'", aliases=['p'])
     async def play(ctx, url: str):
         song_there = os.path.isfile("song.mp3")
         try:
