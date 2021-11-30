@@ -1,4 +1,3 @@
-
 from discord.ext import commands
 import os
 import requests
@@ -139,13 +138,10 @@ class MusicPlayer:
 
 class Roadtrip(commands.Cog, name="Roadtrip"):
     __slots__ = ('bot', 'players')
+
     def __init__(self, bot):
         self.bot = bot
         self.players = {}
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f"{self.__class__.__name__} Cog has been loaded\n----")
 
     async def cleanup(self, guild):
         try:
@@ -188,6 +184,10 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             self.players[ctx.guild.id] = player
 
         return player
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"{self.__class__.__name__} Cog has been loaded\n----")
 
     @commands.command(aliases=['pl'])
     async def playlist(self, ctx, user=None):
@@ -259,19 +259,6 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         except:
             await ctx.channel.send("Please input a valid song")
 
-    @commands.command(aliases=['st'])
-    async def startTrip(self, ctx):
-        channel = ctx.message.author.voice.channel
-        connected = ctx.author.voice
-        if connected:
-            await channel.connect()
-            await ctx.channel.send("joined voice channel")
-
-    @commands.command(aliases=['et'])
-    async def endTrip(self, ctx):
-        await ctx.voice_client.disconnect()
-        await ctx.channel.send("left voice channel")
-
     @commands.command(name='connect', aliases=['join'])
     async def connect_(self, ctx, *, channel: discord.VoiceChannel=None):
         """Connect to voice.
@@ -305,17 +292,22 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
 
         await ctx.send(f'Connected to: **{channel}**', delete_after=20)
 
-        await channel.connect()
-
-    @commands.command(pass_context=True, brief="This will play a song 'play [url]'", aliases=['p', 'play'])
-    async def stream(self, ctx, *, url):
-        """Streams from a url (same as yt, but doesn't predownload)"""
-
+   
+    @commands.command(pass_context=True, brief="This will play a song 'play [url]'", aliases=['p'])
+    async def play(self, ctx, *, search: str):
         async with ctx.typing():
-            player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
-            ctx.voice_client.play(player, after=lambda e: print(f'Player error: {e}') if e else None)
+            vc = ctx.voice_client
 
-        await ctx.send(f'Now playing: {player.title}')
+            if not vc:
+                await ctx.invoke(self.connect_)
+
+            player = self.get_player(ctx)
+
+            # If download is False, source will be a dict which will be used later to regather the stream.
+            # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
+            source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=False)
+
+            await player.queue.put(source)
 
     @commands.command(name='pause')
     async def pause_(self, ctx):
@@ -329,26 +321,6 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
 
         vc.pause()
         await ctx.send(f'**`{ctx.author}`**: Paused the song!')
-
-    @commands.command(name='queue', aliases=['q', 'playlist'])
-    async def queue_info(self, ctx):
-        """Retrieve a basic queue of upcoming songs."""
-        vc = ctx.voice_client
-
-        if not vc or not vc.is_connected():
-            return await ctx.send('I am not currently connected to voice!', delete_after=20)
-
-        player = self.get_player(ctx)
-        if player.queue.empty():
-            return await ctx.send('There are currently no more queued songs.')
-
-        # Grab up to 5 entries from the queue...
-        upcoming = list(itertools.islice(player.queue._queue, 0, 5))
-
-        fmt = '\n'.join(f'**`{_["title"]}`**' for _ in upcoming)
-        embed = discord.Embed(title=f'Upcoming - Next {len(upcoming)}', description=fmt)
-
-        await ctx.send(embed=embed)
 
     @commands.command(name='resume')
     async def resume_(self, ctx):
@@ -379,6 +351,26 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
         vc.stop()
         await ctx.send(f'**`{ctx.author}`**: Skipped the song!')
 
+    @commands.command(name='queue', aliases=['q', 'playlist'])
+    async def queue_info(self, ctx):
+        """Retrieve a basic queue of upcoming songs."""
+        vc = ctx.voice_client
+
+        if not vc or not vc.is_connected():
+            return await ctx.send('I am not currently connected to voice!', delete_after=20)
+
+        player = self.get_player(ctx)
+        if player.queue.empty():
+            return await ctx.send('There are currently no more queued songs.')
+
+        # Grab up to 5 entries from the queue...
+        upcoming = list(itertools.islice(player.queue._queue, 0, 5))
+
+        fmt = '\n'.join(f'**`{_["title"]}`**' for _ in upcoming)
+        embed = discord.Embed(title=f'Upcoming - Next {len(upcoming)}', description=fmt)
+
+        await ctx.send(embed=embed)
+
     @commands.command(name='now_playing', aliases=['np', 'current', 'currentsong', 'playing'])
     async def now_playing_(self, ctx):
         """Display information about the currently playing song."""
@@ -399,7 +391,6 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
 
         player.np = await ctx.send(f'**Now Playing:** `{vc.source.title}` '
                                    f'requested by `{vc.source.requester}`')
-
 
     @commands.command(name='volume', aliases=['vol'])
     async def change_volume(self, ctx, *, vol: float):
@@ -437,19 +428,6 @@ class Roadtrip(commands.Cog, name="Roadtrip"):
             return await ctx.send('I am not currently playing anything!', delete_after=20)
 
         await self.cleanup(ctx.guild)
-
-    '''@play.before_invoke
-    @yt.before_invoke'''
-    @stream.before_invoke
-    async def ensure_voice(self, ctx):
-        if ctx.voice_client is None:
-            if ctx.author.voice:
-                await ctx.author.voice.channel.connect()
-            else:
-                await ctx.send("You are not connected to a voice channel.")
-                raise commands.CommandError("Author not connected to a voice channel.")
-        elif ctx.voice_client.is_playing():
-            ctx.voice_client.stop()
             
 
 def setup(bot):
