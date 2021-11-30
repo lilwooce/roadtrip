@@ -188,6 +188,7 @@ class MusicPlayer:
             await self.next.wait()
 
             # Make sure the FFmpeg process is cleaned up.
+            print("about to cleanup the source")
             source.cleanup()
             self.current = None
 
