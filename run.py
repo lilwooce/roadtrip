@@ -6,7 +6,7 @@ import traceback
 from discord.ext import commands
 from dotenv import load_dotenv
 
-def get_prefix(client, message):
+def get_prefix(message):
     obj = {"f1": "server", "q1": message.guild.id}
     result = requests.get(geturl, params=obj, headers={"User-Agent": "XY"})
     prefix = result.text.strip('\"')
