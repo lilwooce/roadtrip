@@ -19,7 +19,7 @@ geturl = os.getenv('GET_URL')
 token = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.default()
 intents.members = True
-bot = commands.Bot(command_prefix=get_prefix, intents=intents, description=f"Listen to music on a roadtrip")
+bot = commands.Bot(command_prefix="!", intents=intents, description=f"Listen to music on a roadtrip")
 
 initial_extensions = {
     "cogs.Config",
